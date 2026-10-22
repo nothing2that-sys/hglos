@@ -6,6 +6,52 @@
 
 현재 버전: **1.0.0** · 대상: **Claude Code**(터미널·데스크탑·VS Code), Claude 앱 스킬 업로드 · 라이선스: **MIT**
 
+## 처음이라면: 가장 쉬운 사용법 (Beginner Quick Start)
+
+**한국어**
+
+코딩·터미널이 낯설어도 됩니다. 사람이 할 일은 "설치 1번, 말 3번, 승인 몇 번"입니다.
+
+1. **준비** — [Claude Code](https://claude.com/claude-code), `git`, `Python 3.10+` 를 설치합니다. 작업할 폴더가 `git` 저장소가 아니면 그 폴더의 터미널에서 `git init` 을 한 번 실행합니다.
+2. **설치 (한 번만)** — 그 폴더에서 `claude` 를 실행하고 아래 두 줄을 차례로 입력합니다.
+   ```text
+   /plugin marketplace add nothing2that-sys/hglos
+   /plugin install hglos@hglos
+   ```
+3. **말로 시키기** — 아래 세 문장을 **각각 새 대화(새 세션)** 에서 말합니다. 새 세션으로 나누는 이유는 만든 쪽이 스스로 검사하지 않게 하기 위해서입니다.
+
+   | 순서 | 이렇게 말하세요 | 그러면 |
+   |---|---|---|
+   | ① 계획 | `hglos-design 으로 계획 세워줘. 하고 싶은 일: (여기에 평소 말투로 적기)` | Claude 가 질문(인터뷰)을 합니다. 답하고, **"범위"와 "계획"이 맞으면 승인**한다고 말합니다. `doc/` 에 계획서 파일이 생깁니다. |
+   | ② 구현 | `hglos-implement 로 doc/ 의 계획서를 구현해줘. 커밋하지 마.` | 계획대로 만들고 보고서 파일을 남깁니다. |
+   | ③ 검증 | `hglos-verify 로 slice 종결 검증해줘. 커밋하지 마.` | 새로운 눈으로 다시 확인하고 `통과/미달/조건부/측정 불가/미검증` 중 하나로 판정합니다. |
+
+4. **마무리** — ③ 의 판정을 읽고, 통과면 변경을 직접 커밋합니다. 미달이면 어디가 모자란지 적혀 있으니 ②로 돌아갑니다.
+
+팁: 모르는 단어가 나오면 그냥 "쉽게 설명해줘"라고 하세요. 어디서든 `이 작업들 병렬로 나눠도 돼?` 처럼 물어볼 수 있습니다. 커밋은 항상 사람이 합니다.
+
+**English**
+
+You don't need to be a developer. Your part is: install once, say three sentences, approve a few times.
+
+1. **Prepare** — Install [Claude Code](https://claude.com/claude-code), `git`, and `Python 3.10+`. If your project folder is not a git repository yet, run `git init` once in it.
+2. **Install (once)** — Run `claude` in that folder and type:
+   ```text
+   /plugin marketplace add nothing2that-sys/hglos
+   /plugin install hglos@hglos
+   ```
+3. **Just ask** — Say each sentence below in a **separate new chat (new session)**. Separate sessions are the point: whoever builds something must not be the one who judges it.
+
+   | Step | Say this | What happens |
+   |---|---|---|
+   | 1. Plan | `Use hglos-design to make a plan. What I want: (describe it in plain words)` | Claude interviews you. Answer, then say you **approve the scope and the plan**. A plan file appears under `doc/`. |
+   | 2. Build | `Use hglos-implement to implement the plan in doc/. Do not commit.` | It builds per the plan and leaves a report file. |
+   | 3. Check | `Use hglos-verify to verify the slice is done. Do not commit.` | A fresh reviewer re-checks everything and returns one verdict: pass / fail / conditional / unmeasurable / unverified (the skill's output is in Korean). |
+
+4. **Finish** — Read the verdict. If it passes, commit the changes yourself. If not, it says what is missing; go back to step 2.
+
+Tips: if you see an unfamiliar word, just ask "explain simply". Commits are always done by a human.
+
 ## 무엇을 하나
 
 | 스킬 | 하는 일 | 사람 게이트 |
@@ -148,6 +194,39 @@ C1~Cn 을 구현자 보고서에 의존하지 말고 직접 재현해. 검증자
 | `stale_ids.py --ledger <대장.md> <문서 폴더>` | 닫힌 항목 ID 가 "대기·남은·미완료 체크박스" 맥락에 남은 줄 찾기 (문면 노후화 검출) | 0 없음, 1 발견, 2 입력 오류 |
 
 위치: 플러그인 설치 시 각 스킬 폴더의 `scripts/`, 저장소에서는 [`shared/scripts/`](shared/scripts).
+
+## Usage (English)
+
+**What it is.** Three Claude skills joined by one plan file (`Slice_Plan`) and human approval gates. A *slice* is one chunk of work that runs from input to an observable result.
+
+| Skill | Role | Human gate |
+|---|---|---|
+| `hglos-design` | Interviews you and writes one plan: the claim to close, completion criteria (thresholds fixed *before* measuring), non-goals, checkable assumptions, task split and parallelism. Writes no code. | approve scope, approve plan |
+| `hglos-implement` | Turns the approved plan into an instruction file, delegates tasks to subagents (or Codex), collects report files. Parallel-safe tasks run together. | stops only on shortfall |
+| `hglos-verify` | Independent fresh-context verifier. Mode A: adversarial review of the git diff in rounds until it converges. Mode B: re-runs the plan's completion criteria and writes a verdict. Read-only. | human approves closing |
+
+**Install.**
+
+```text
+/plugin marketplace add nothing2that-sys/hglos
+/plugin install hglos@hglos
+```
+
+or from a shell: `claude plugin marketplace add nothing2that-sys/hglos` then `claude plugin install hglos@hglos`. Alternatively upload the `.skill` files from [`dist/`](dist) in the Claude app (Settings → Capabilities → Skills), or copy `plugins/hglos/skills/*` into `~/.claude/skills/`.
+
+**Flow for one slice** (each leg in its own new session):
+
+1. Design: `Use hglos-design to write a new slice plan. Goal: … Non-goals: … Stop at the scope and plan gates for my approval.` Then commit the plan and put that commit hash on the first line of the plan's "Current State".
+2. Implement: `Use hglos-implement to implement doc/Slice_Plan_<name>.md. Run the start-condition check first and stop if it fails. Do not commit.`
+3. Verify: `Use hglos-verify in mode B to judge closing of doc/Slice_Plan_<name>.md. Reproduce every criterion yourself; do not trust the implementer's report. Do not commit.`
+4. Diff review only (mode A): `Before this commit, run an adversarial review of my changes with hglos-verify, until fixed point.`
+5. Parallelism check: `Can these tasks run in parallel?`
+
+**Key rules.** An unapproved plan has no effect. The builder never judges its own work (verifier order: different-vendor model, default Codex CLI → another model from the same vendor → same model). Verdicts are only pass / fail / conditional / unmeasurable / unverified; no evidence means fail. Counts and set comparisons come from scripts, not from the model.
+
+**Requirements.** Claude Code (or a Claude app that supports skill upload), `git`, Python 3.10+ (standard library only). Optional: [Codex CLI](https://github.com/openai/codex) as the first-choice verifier. Subagent-based legs (`hglos-implement`, `hglos-verify`) need Claude Code / desktop; in web chat only `hglos-design` is practical.
+
+**Optional always-on rules.** Copy the paste block at the bottom of [`plugins/hglos/RULES.md`](plugins/hglos/RULES.md) into your project's `CLAUDE.md` or `AGENTS.md`.
 
 ## 저장소 구조
 
