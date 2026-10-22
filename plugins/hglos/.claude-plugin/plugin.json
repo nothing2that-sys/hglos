@@ -1,0 +1,9 @@
+{
+  "name": "hglos",
+  "version": "1.0.0",
+  "description": "Human-gated design -> implement -> verify skills for Claude. One plan file, instruction/report handoff, independent verification, parallel-split check.",
+  "author": { "name": "nothing2that-sys" },
+  "homepage": "https://github.com/nothing2that-sys/hglos",
+  "repository": "https://github.com/nothing2that-sys/hglos",
+  "license": "MIT"
+}

@@ -1,0 +1,60 @@
+{
+  "type": "object",
+  "additionalProperties": false,
+  "required": ["findings"],
+  "properties": {
+    "findings": {
+      "type": "array",
+      "description": "Defects found in the reviewed diff. Empty array if none.",
+      "items": {
+        "type": "object",
+        "additionalProperties": false,
+        "required": ["path", "line", "category", "severity", "evidence", "claim", "detail"],
+        "properties": {
+          "path": {
+            "type": "string",
+            "description": "File path exactly as git reports it, forward slashes."
+          },
+          "line": {
+            "type": ["integer", "null"],
+            "description": "Primary line number of the defect. null if it cannot be determined."
+          },
+          "category": {
+            "type": "string",
+            "enum": [
+              "nullderef",
+              "bounds",
+              "leak",
+              "race",
+              "logic",
+              "apicontract",
+              "errorhandling",
+              "perf",
+              "style",
+              "other"
+            ],
+            "description": "Defect class."
+          },
+          "severity": {
+            "type": "string",
+            "enum": ["critical", "high", "medium", "low", "style"],
+            "description": "Impact if this defect ships."
+          },
+          "evidence": {
+            "type": "string",
+            "enum": ["observed", "inferred", "unconfirmed"],
+            "description": "observed = directly visible in code read. inferred = depends on unverifiable caller or runtime assumptions. unconfirmed = suspected but not confirmed."
+          },
+          "claim": {
+            "type": "string",
+            "description": "One line summary. No newlines."
+          },
+          "detail": {
+            "type": "string",
+            "description": "Why this is a defect. One to three sentences."
+          }
+        }
+      }
+    }
+  }
+}

@@ -1,0 +1,59 @@
+<task>
+Adversarially review the uncommitted changes in this git repository.
+
+Run `git diff` to see the changes. Attack them: assume the changes are wrong
+until proven otherwise. Your job is to find defects the author missed, not to
+confirm the work is fine.
+
+Review only the changed lines and their immediate surrounding context. Do not
+audit the rest of the codebase.
+</task>
+
+<grounding_rules>
+Every finding must point at a file and line you actually read in the diff.
+Do not report a finding you cannot locate.
+
+Classify each finding's evidence level honestly:
+- observed    = you read the code and the defect is directly visible
+- inferred    = the defect depends on caller or runtime assumptions you cannot verify here
+- unconfirmed = you suspect a problem but could not confirm it
+
+Never upgrade inferred to observed. An honest inferred is more useful than a
+confident wrong observed.
+</grounding_rules>
+
+<dig_deeper_nudge>
+Obvious defects are table stakes: missing null checks, division by zero,
+unreachable code. Report them, but do not stop there.
+
+Look specifically for defects that compile cleanly and fail silently:
+- value-vs-reference mistakes, where a loop or assignment mutates a copy and the
+  write is discarded
+- copy-paste errors that use the wrong field, member, or dimension in a check
+- resource leaks on early-return or exception paths
+- off-by-one and inverted comparisons in bounds validation
+- validation that checks the wrong axis (for example, comparing a horizontal
+  extent against a vertical limit)
+
+These are the defects that reach production. Weight your effort toward them.
+</dig_deeper_nudge>
+
+<completeness_contract>
+Cover every changed hunk before you finish. Do not stop after the first few
+findings. If a hunk contains no defect, that is a valid conclusion, but you must
+have looked at it.
+
+Emit one entry per distinct defect. Do not emit duplicates for the same defect at
+the same location.
+</completeness_contract>
+
+<output_contract>
+Your final response must conform to the supplied JSON schema and contain nothing
+else. No prose before or after. No markdown fences.
+
+For each finding, set `path` to the file path exactly as git reports it using
+forward slashes, and `line` to the primary line number of the defect. If no line
+can be determined, set `line` to null.
+
+If you find no defects, return an empty findings array.
+</output_contract>

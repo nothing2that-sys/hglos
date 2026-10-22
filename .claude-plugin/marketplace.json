@@ -1,0 +1,15 @@
+{
+  "name": "hglos",
+  "description": "HGLOS - human-gated design, implement, verify skills for Claude Code",
+  "owner": {
+    "name": "nothing2that-sys"
+  },
+  "plugins": [
+    {
+      "name": "hglos",
+      "source": "./plugins/hglos",
+      "description": "Human-gated design -> implement -> verify skills. One plan file, instruction/report handoff, independent verification, parallel-split check.",
+      "version": "1.0.0"
+    }
+  ]
+}
