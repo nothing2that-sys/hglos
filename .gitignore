@@ -1,5 +1,8 @@
 __pycache__/
-*.pyc
-.venv/
-.DS_Store
-Thumbs.db
+*.py[cod]
+skill/
+validation/
+.hglos/
+.env
+.env.*
+!.env.example

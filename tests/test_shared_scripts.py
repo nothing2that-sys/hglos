@@ -1,7 +1,7 @@
-"""shared/scripts 공용 판정 스크립트 테스트.
+"""plugin/hglos/scripts 공용 판정 스크립트 테스트.
 
 각 스크립트를 자식 프로세스로 돌려 종료 코드와 출력을 본다. 자식에게 UTF-8 을 강제한다
-(강제하지 않으면 한글이 깨져 assertNotIn 이 무조건 통과했다).
+(O-3: 강제하지 않으면 한글이 깨져 assertNotIn 이 무조건 통과했다).
 실패 경로(입력 오류 -> 종료 코드 2)를 반드시 같이 본다.
 """
 
@@ -14,7 +14,7 @@ import unittest
 from pathlib import Path
 
 REPO = Path(__file__).resolve().parent.parent
-SCRIPTS = Path(os.environ.get("HGLOS_SHARED_SCRIPTS", REPO / "shared" / "scripts"))
+SCRIPTS = Path(os.environ.get("HGLOS_SHARED_SCRIPTS", REPO / "plugin" / "hglos" / "scripts"))
 
 
 def run(script, *args, stdin=None):
@@ -109,7 +109,7 @@ class CheckParallel(Base):
         self.assertEqual(sum(len(g) for g in res["parallel_groups"]) + len(res["serial"]), 3)
 
     def test_same_file_different_spelling_not_parallel(self):
-        # 재현된 오판: 철자만 다른 같은 파일을 병렬로 판정했다
+        # 독립 검토(2026-10-15)가 재현한 오판: 철자만 다른 같은 파일을 병렬로 판정했다
         cases = [("Src/A.cs", "src/a.cs"), ("src\\a.cs", "src/a.cs"), ("src/./a.cs", "src/a.cs"),
                  ("src//a.cs", "src/a.cs"), ("src/../src/a.cs", "src/a.cs"), ("src/[ab].cs", "src/a.cs"),
                  (".", "src/a.cs"), ("src/a", "src/a/**")]
@@ -127,7 +127,7 @@ class CheckParallel(Base):
         self.assertEqual(code, 2)
 
     def test_after_puts_dependent_in_later_stage(self):
-        # 실사용에서 발견: 충돌이 없어도 B 가 A 의 산출물을 쓰면 같은 단계에 두면 안 된다
+        # 실사용(2026-10-21 basic)에서 발견: 충돌이 없어도 B 가 A 의 산출물을 쓰면 같은 단계에 두면 안 된다
         d = self.base()
         d["tasks"][1]["after"] = ["A"]
         code, out, _ = run("check_parallel.py", self.tasks(d), "--json")
@@ -230,7 +230,7 @@ class StaleIds(Base):
         self.assertIn("발견 없음", out)
 
     def test_unchecked_checkbox_is_pending(self):
-        # 회귀 픽스처: 실사고 형태 (닫힌 M1 을 미완료 체크박스가 들고 있음)
+        # 회귀 픽스처: Refactoring 02_WORKBOARD 오류 ⓜ 의 형태 (닫힌 M1 을 미완료 체크박스가 들고 있음)
         self.write("d/x.md", "- [ ] **headless NRE 조사** - M1 합격 기준 회복\n"
                              "- [x] **headless NRE 조사 - 항목 내림** M1 달성\n"
                              "* [ ] M1 재확인\n"
@@ -320,11 +320,3 @@ class SetDiff(Base):
 
 if __name__ == "__main__":
     unittest.main()
-
-
-class BuildSync(unittest.TestCase):
-    def test_skill_copies_match_shared(self):
-        p = subprocess.run([sys.executable, str(REPO / "tools" / "build.py"), "--check"],
-                           capture_output=True, text=True, encoding="utf-8",
-                           env=dict(os.environ, PYTHONIOENCODING="utf-8"))
-        self.assertEqual(p.returncode, 0, p.stderr)

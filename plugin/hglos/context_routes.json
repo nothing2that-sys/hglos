@@ -1,0 +1,11 @@
+{
+  "schema_version": 1,
+  "tasks": {
+    "answer": [],
+    "design": ["skills/hglos-design/SKILL.md", "skills/hglos-design/references/plan-items.md", "skills/hglos-design/assets/slice-plan-template.md"],
+    "implement": ["skills/hglos-implement/SKILL.md", "skills/hglos-implement/assets/instruction-template.md", "skills/hglos-implement/assets/report-template.md", "context-handoff.md"],
+    "verify": ["skills/hglos-verify/SKILL.md", "skills/hglos-verify/agents/native-validator.md", "skills/hglos-verify/agents/validator.md", "skills/hglos-verify/agents/cross-host-validator.md", "skills/hglos-verify/agents/reviewgate-validator.md", "skills/hglos-verify/assets/review-prompt.txt", "skills/hglos-verify/assets/findings-schema.json", "context-handoff.md"],
+    "dashboard": ["skills/hglos-dashboard/SKILL.md", "skills/hglos-dashboard/references/visual-patterns.md"],
+    "coordinate": ["skills/hglos-coordinate/SKILL.md", "skills/hglos-coordinate/references/coordination.md"]
+  }
+}

@@ -1,0 +1,14 @@
+{
+  "name": "hglos",
+  "owner": {
+    "name": "nothing2that-sys"
+  },
+  "plugins": [
+    {
+      "name": "hglos",
+      "source": "./plugin/hglos",
+      "description": "Human-gated design, implementation, verification, dashboards and session coordination."
+    }
+  ],
+  "description": "Human-gated design, implementation, verification, dashboards and session coordination for coding agents."
+}

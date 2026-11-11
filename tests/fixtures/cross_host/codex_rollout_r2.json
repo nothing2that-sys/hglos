@@ -1,0 +1,21 @@
+{
+  "_comment": "doc/33 O fixture. Codex rollout line structure observed in r2/S0-11 (6.1 F3), rebuilt with synthetic values only (U13). Placeholders: {{THREAD_ID}} {{MODEL}} {{EFFORT}} {{REQUEST}}. Line numbers are 1-based positions in this list.",
+  "lines": [
+    {"type": "session_meta", "payload": {"id": "{{THREAD_ID}}", "originator": "codex_exec", "source": "exec", "cli_version": "0.164.0", "cwd": "C:\\Users\\example\\repo", "account_id": "example-acct-1", "user_id": "example-user-1"}},
+    {"type": "event_msg", "payload": {"type": "task_started"}},
+    {"type": "response_item", "payload": {"type": "message", "role": "developer", "content": [{"type": "input_text", "text": "<tools>\nSynthetic tool list for the fixture. This body is long enough that its head excludes the sentinel. SYNTHETIC-DEV-BODY-SENTINEL-TOOLS</tools>"}]}},
+    {"type": "response_item", "payload": {"type": "message", "role": "developer", "content": [{"type": "input_text", "text": "You are Codex, a synthetic fixture agent.\nThis body is long enough that its head excludes the sentinel. SYNTHETIC-DEV-BODY-SENTINEL-SYSTEM"}]}},
+    {"type": "response_item", "payload": {"type": "message", "role": "developer", "content": [{"type": "input_text", "text": "## Memory\nSynthetic memory block for the fixture. This body is long enough that its head excludes the sentinel. SYNTHETIC-DEV-BODY-SENTINEL-MEMORY"}]}},
+    {"type": "response_item", "payload": {"type": "message", "role": "developer", "content": [{"type": "input_text", "text": "<multi_agent_role>\nSynthetic role text for the fixture. This body is long enough that its head excludes the sentinel. SYNTHETIC-DEV-BODY-SENTINEL-ROLE</multi_agent_role>"}]}},
+    {"type": "response_item", "payload": {"type": "message", "role": "developer", "content": [{"type": "input_text", "text": "<multi_agent_mode>\nSynthetic mode text for the fixture. This body is long enough that its head excludes the sentinel. SYNTHETIC-DEV-BODY-SENTINEL-MODE</multi_agent_mode>"}]}},
+    {"type": "response_item", "payload": {"type": "message", "role": "user", "content": [{"type": "input_text", "text": "# AGENTS.md instructions for C:\\Users\\example\n\nSynthetic global instructions. This body is long enough that its head excludes the sentinel. SYNTHETIC-USER-BODY-SENTINEL-AGENTS"}]}},
+    {"type": "world_state", "payload": {}},
+    {"type": "turn_context", "payload": {"cwd": "C:\\Users\\example\\repo", "model": "{{MODEL}}", "effort": "{{EFFORT}}"}},
+    {"type": "thread_settings_applied", "payload": {}},
+    {"type": "response_item", "payload": {"type": "message", "role": "user", "content": [{"type": "input_text", "text": "{{REQUEST}}"}]}},
+    {"type": "event_msg", "payload": {"type": "user_message"}},
+    {"type": "response_item", "payload": {"type": "reasoning", "summary": []}},
+    {"type": "response_item", "payload": {"type": "message", "role": "assistant", "content": [{"type": "output_text", "text": "{\"findings\": []}"}]}},
+    {"type": "event_msg", "payload": {"type": "task_complete"}}
+  ]
+}
