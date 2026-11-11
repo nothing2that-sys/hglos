@@ -1,0 +1,165 @@
+<!-- HGLOS-DASHBOARD v1 -->
+<!doctype html><html lang="ko"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><meta http-equiv="Content-Security-Policy" content="default-src 'none'; style-src 'unsafe-inline'; base-uri 'none'; form-action 'none'"><title>HGLOS · HGLOS Demo</title><style>
+    :root{color-scheme:light;font-family:Segoe UI,Malgun Gothic,sans-serif;color:#193249;background:#f0f4f8}
+    *{box-sizing:border-box}body{margin:0;padding:36px;max-width:1600px;margin-inline:auto}
+    header{padding:30px;border-radius:18px;background:#13364a;color:#fff;margin-bottom:24px}
+    .eyebrow{color:#94e4d5;font-weight:700;letter-spacing:.13em;font-size:12px}h1{font-size:30px;margin:12px 0}
+    header p{color:#d1e2ed;line-height:1.7;max-width:900px}.metrics{display:flex;gap:16px;flex-wrap:wrap;margin-top:24px}
+    .metric{padding:14px 22px;border:1px solid #4b697b;border-radius:10px}.metric strong{font-size:24px;margin-right:8px}
+    main{display:grid;grid-template-columns:repeat(auto-fit,minmax(min(100%,500px),1fr));gap:22px}
+    article{background:white;border:1px solid #d6e0e8;border-radius:14px;padding:24px;min-width:0;box-shadow:0 5px 20px #19324908}
+    h2{margin:0 0 14px;font-size:21px}h3{font-size:15px;margin:20px 0 10px}.badge{display:inline-block;font-size:11px;padding:4px 7px;background:#eaf3f7;color:#3d596d;border-radius:5px}
+    a{color:#17628e;overflow-wrap:anywhere}small{display:block;color:#617487;font-size:11px;overflow-wrap:anywhere;margin:8px 0 18px}
+    pre{font:13px/1.8 Consolas,Malgun Gothic,monospace;white-space:pre-wrap;overflow-wrap:anywhere;background:#f6f8fb;border-left:3px solid #70a8b7;padding:14px;border-radius:5px}
+    details{margin-top:16px}summary{cursor:pointer;color:#346275;font-size:14px}.wide{grid-column:1/-1}
+    article:has(.task-board){grid-column:1/-1}figure{margin:18px 0;overflow-x:auto;padding-bottom:8px}
+    figcaption{font-size:12px;color:#617487;line-height:1.7;margin:8px 0}.workflow svg{width:100%;height:auto;min-width:560px;max-width:1000px}.dependency svg{display:block;max-width:none;height:auto}
+    .visual-note{padding:10px 14px;border-radius:6px;background:#eef3f8;color:#4e6175;font-size:12px}
+    .resume-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(210px,1fr));gap:12px}.resume{padding:12px 16px;border:1px solid #d6e0e8;border-radius:10px}.resume h3{margin:0;font-size:13px}.resume p{font-size:14px;line-height:1.7}
+    .task-board{display:grid;grid-template-columns:repeat(5,minmax(170px,1fr));gap:12px;overflow-x:auto;padding-bottom:8px}
+    .lane{padding:12px;background:#f5f7fa;border-top:4px solid #8295a6;border-radius:8px}.lane h4{font-size:13px;margin:0 0 12px}.lane h4 span{float:right}.lane.active{border-color:#1c5794}.lane.done{border-color:#24624d}.lane.blocked{border-color:#8b461c}.lane.unknown{border-style:dashed;border-color:#665182}
+    .task{margin:10px 0;padding:12px;background:white;border:1px solid #dde5ed;border-radius:8px;overflow-wrap:anywhere}.task p{font-size:12px;line-height:1.7}.task small{margin:8px 0}.task summary{font-size:12px}
+    .table-scroll{overflow-x:auto}table{border-collapse:collapse;width:100%;font-size:13px}th,td{padding:12px;border:1px solid #d6e0e8;text-align:left;line-height:1.7;min-width:100px}th{background:#f0f5f8}
+    .warnings{padding:14px;background:#fff2e7;border-left:4px solid #a46335;margin:18px 0;font-size:13px;overflow-wrap:anywhere}.warnings li{margin:7px 0}.phase-evidence{font-size:12px;color:#617487;overflow-wrap:anywhere}
+    .bar-row{display:grid;grid-template-columns:minmax(100px,180px) 1fr 40px;gap:12px;align-items:center;margin:12px 0;font-size:13px}.bar-track{height:14px;background:#edf1f5;border-radius:4px}.bar-fill{height:100%;background:#52899a;border-radius:4px}
+    footer{font-size:12px;color:#617487;margin:22px 0} @media(max-width:600px){body{padding:14px}header{padding:20px}article{padding:18px}h1{font-size:24px}}
+
+.session-metrics{display:flex;flex-wrap:wrap;gap:10px;margin:16px 0}
+.session-metric{padding:10px 14px;background:#f0f5f8;border-radius:8px;font-size:13px}
+.session-metric strong{font-size:20px;margin-right:8px}
+.session-card{border:1px solid #d6e0e8;border-radius:10px;padding:14px;min-width:0}
+.session-card[open]{border-color:#17628e;background:#f9fcff}
+.session-card>summary{font-size:14px;font-weight:600;overflow-wrap:anywhere;line-height:1.8}
+.session-card dl{display:grid;grid-template-columns:130px minmax(0,1fr);gap:10px;font-size:13px;line-height:1.8}
+.session-card dt{font-weight:600}.session-card dd{margin:0;white-space:pre-wrap;overflow-wrap:anywhere}
+.session-card li,.scope-index li{font-size:13px;line-height:1.9;overflow-wrap:anywhere}
+.session-card pre{margin-bottom:0}.session-map svg{display:block;width:100%;max-width:780px;min-width:560px;height:auto}
+.scope-index>summary{line-height:1.8;overflow-wrap:anywhere}.session-map{overflow-x:auto}
+summary:focus-visible,a:focus-visible{outline:3px solid #17628e;outline-offset:4px}
+@media(max-width:600px){.session-card dl{grid-template-columns:1fr;gap:4px}.session-card dd{margin-bottom:8px}}
+/* Original HGLOS presentation. Distributed under the adjacent skill MIT LICENSE. */
+:root{font-family:Segoe UI,Malgun Gothic,sans-serif;color:#203044;background:#f3f5f8;--line:#dce3eb;--muted:#64748b;--brand:#0f766e}
+body{max-width:1480px;margin:auto;padding:28px;color:#203044;background:#f3f5f8}
+.page-header{display:flex;align-items:flex-start;justify-content:space-between;gap:20px;padding:0 0 16px;margin:0;background:transparent;color:#132b43;border-radius:0}
+.eyebrow{color:#0f766e;font-size:11px;letter-spacing:.15em;font-weight:750}
+.page-header h1{margin:8px 0;font-size:28px;line-height:1.3;overflow-wrap:anywhere}
+.page-header p{margin:0;font-size:12px;color:var(--muted);line-height:1.6}
+.snapshot-stamp{text-align:right;color:var(--muted);font-size:11px;line-height:1.8;flex-shrink:0;padding-top:6px}
+.project-nav{display:flex;flex-wrap:wrap;gap:8px;margin-bottom:18px;font-size:12px}
+.project-nav a{padding:6px 10px;border:1px solid var(--line);border-radius:7px;background:white;text-decoration:none}
+main{display:block}
+.dashboard-overview,.plan-card,.queues-panel,.session-glance,main>article{background:white;border:1px solid var(--line);border-radius:14px;padding:22px;margin-bottom:20px;min-width:0;box-shadow:0 3px 14px #19324905}
+.section-heading{display:flex;align-items:center;justify-content:space-between;gap:16px;margin-bottom:14px}
+.section-heading h2,.section-heading h3{margin:0}
+.section-heading>a,.section-heading>span{font-size:12px;flex-shrink:0;color:var(--muted)}
+h2{font-size:19px;margin:0 0 14px}h3{font-size:15px;margin:20px 0 12px}.muted{font-size:12px;font-weight:400;color:var(--muted);line-height:1.7}
+.warning-count{border:1px solid var(--line);padding:4px 8px;border-radius:6px}
+.status-metrics{display:grid;grid-template-columns:repeat(5,minmax(0,1fr));gap:12px}
+.status-metric{display:grid;grid-template-columns:1fr auto;align-items:baseline;gap:4px;padding:15px 18px;border:1px solid var(--line);border-left:4px solid #94a3b8;border-radius:10px;color:#334155;text-decoration:none;background:#fbfcfe}
+.status-metric .metric-label{grid-column:1/-1;font-size:12px;font-weight:650}.status-metric strong{font-size:32px;line-height:1.4;font-weight:750}.metric-unit{font-size:11px;color:var(--muted)}
+.status-metric.active{border-left-color:#2563eb;background:#eff6ff}.status-metric.blocked{border-left-color:#c66a13;background:#fff7ed}.status-metric.done{border-left-color:#16815e;background:#f0fdf7}.status-metric.unknown{border-left-color:#8064a1;background:#f8f5fc}
+.status-metric:hover,.session-glance-card:hover{border-color:var(--brand)}
+.status-segments{display:flex;gap:2px;overflow:hidden;min-height:8px;border-radius:4px;background:#edf1f5;margin-top:16px}
+.segment{display:block;min-height:8px;background:#94a3b8}.segment.active{background:#2563eb}.segment.blocked{background:#c66a13}.segment.done{background:#16815e}.segment.unknown{background:#8064a1}
+.dashboard-overview>.muted{margin:8px 0 0}
+.plan-card{padding:22px}.plan-card .visual-note{font-size:11px;background:#f4f7fa;padding:7px 10px;margin:8px 0;color:#64748b}
+.workflow{margin:8px 0 12px;overflow:auto}.workflow svg{display:block;width:100%;max-width:950px;min-width:600px;height:auto}
+figcaption{font-size:11px;line-height:1.6;color:var(--muted);margin-top:8px}
+.resume-grid{display:grid;grid-template-columns:1fr 1.5fr;gap:12px;margin:12px 0 18px}
+.resume{padding:10px 14px;border:1px solid var(--line);border-left:3px solid var(--brand);background:#f9fbfd;border-radius:8px}.resume h3{font-size:11px;margin:0;color:var(--muted)}.resume p{font-size:15px;margin:5px 0;font-weight:600;line-height:1.6;overflow-wrap:anywhere}.resume small{font-size:10px;margin:0}
+.flow-panel{padding:16px;border:1px solid var(--line);border-radius:12px;background:#fcfdff;margin:16px 0 22px}.flow-panel .section-heading{margin:0 0 10px}
+.dependency{overflow:auto;max-height:650px;margin:0;padding-bottom:8px}.dependency svg{display:block;max-width:none;height:auto}.dependency svg a{cursor:pointer}.dependency svg a:hover rect{stroke-width:3}
+.task-board{display:grid;grid-template-columns:repeat(5,minmax(0,1fr));gap:10px;overflow:visible;padding-bottom:0}
+.lane{padding:10px;border-radius:9px;background:#f7f9fc;min-width:0;border-top-width:3px}.lane h4{font-size:12px;margin:0 0 10px}.lane h4 span{font-weight:700}
+.task{padding:10px;margin:8px 0;background:white;border:1px solid var(--line);border-radius:8px;overflow-wrap:anywhere}
+.task>summary{display:flex;align-items:flex-start;gap:8px;flex-wrap:wrap;list-style:none;line-height:1.6;font-size:13px;color:#24394c}
+.task>summary::-webkit-details-marker{display:none}.task>summary:before{content:'▸';color:var(--muted)}.task[open]>summary:before{content:'▾'}.task>summary>strong{flex:1;min-width:50px}.task-status{font-size:10px;color:var(--muted);white-space:nowrap}
+.task p{font-size:12px;line-height:1.7;margin:10px 0}.task small{font-size:11px;margin:10px 0;color:var(--muted)}
+.task[open]{border-color:#91b9b1}.task:target,.status-queue:target,.source-meta:target{outline:3px solid #2a9d8f;outline-offset:3px}
+.evidence-panel,.source-meta{margin-top:18px}.evidence-panel>summary,.source-meta>summary{font-size:12px}
+details>summary{cursor:pointer;overflow-wrap:anywhere}pre{font:12px/1.75 Consolas,Malgun Gothic,monospace;background:#f6f8fb;overflow-wrap:anywhere;white-space:pre-wrap}
+.warnings{background:#fff7ed;border:1px solid #fed7aa;border-left:4px solid #c66a13;border-radius:8px;font-size:12px}.empty-state{color:var(--muted);background:#f7f9fc;padding:16px;border-radius:8px;font-size:13px}
+.status-queue{border-bottom:1px solid var(--line);padding:12px 0}.status-queue li{display:flex;flex-wrap:wrap;justify-content:space-between;gap:8px;padding:8px 0}.status-queue li span{font-size:11px;color:var(--muted);overflow-wrap:anywhere}.status-queue ul{padding-left:18px}
+.session-glance-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(min(100%,250px),1fr));gap:12px}
+.session-glance-card{display:flex;flex-direction:column;gap:8px;padding:16px;border:1px solid var(--line);border-radius:10px;color:#263d51;text-decoration:none;overflow-wrap:anywhere}.session-glance-card strong{font-size:13px}.session-glance-card span{font-size:12px;color:var(--muted)}.session-glance-card small{font-size:11px;margin:0}
+.session-metrics{gap:10px}.session-metric{border-radius:8px;background:#f8fafc}.session-card{border:1px solid var(--line);border-radius:8px;padding:12px;margin-top:12px}
+.table-scroll{overflow-x:auto}table{font-size:12px}th,td{padding:10px;min-width:100px}.phase-evidence{font-size:11px;line-height:1.6;color:var(--muted)}
+a:focus-visible,summary:focus-visible,figure:focus-visible{outline:3px solid #0f766e;outline-offset:3px}svg a:focus rect{stroke:#0f766e;stroke-width:4}
+footer{font-size:11px;color:var(--muted);line-height:1.8;margin:18px 0;overflow-wrap:anywhere}
+@media(max-width:1100px){.task-board{grid-template-columns:repeat(3,minmax(0,1fr))}.status-metric{padding:12px}.metric-unit{display:none}}
+@media(max-width:720px){body{padding:14px}.page-header{display:block}.snapshot-stamp{text-align:left;margin-top:8px;padding:0}.page-header h1{font-size:23px}.status-metrics{grid-template-columns:repeat(3,minmax(0,1fr))}.status-metric strong{font-size:27px}.resume-grid{grid-template-columns:1fr}.task-board{grid-template-columns:repeat(2,minmax(0,1fr))}.dashboard-overview,.plan-card,.queues-panel,.session-glance,main>article{padding:16px}.section-heading{gap:8px;align-items:flex-start}.section-heading h2{font-size:17px}.warning-count{font-size:10px!important}}
+@media(max-width:480px){.task-board{grid-template-columns:1fr}.status-metrics{gap:6px}.status-metric{padding:9px}.status-metric .metric-label{font-size:10px}.flow-panel{padding:10px}.section-heading>a{font-size:10px}}
+@media print{body{padding:0;max-width:none;background:white}.page-header,.dashboard-overview,.plan-card,.queues-panel,.session-glance,main>article{box-shadow:none;break-inside:avoid}.project-nav{display:none}.dependency,.workflow{max-height:none;overflow:visible}.dependency svg,.workflow svg{min-width:0;max-width:100%;width:100%;height:auto}.task-board{grid-template-columns:repeat(3,minmax(0,1fr))}a{color:inherit}}
+</style></head><body><aside style="padding:16px 24px;background:#fff0d1;border:2px solid #c98812;border-radius:12px;margin-bottom:20px;font-weight:700">학습용 가상 대시보드 · 상태와 근거는 화면 설명을 위한 예시입니다. 실제 승인·구현·테스트 결과가 아닙니다.</aside><header class="page-header"><div><div class="eyebrow">HGLOS / PROJECT SNAPSHOT</div><h1>HGLOS Demo 프로젝트 대시보드</h1><p>상태 → 작업 흐름 → 근거. 문서 정본 · 승인/완료 유효성 미검증</p></div><div class="snapshot-stamp">생성 가상 시나리오 · 실제 작업 결과 아님<br>수동 생성 · 실시간 갱신 아님</div></header><nav class="project-nav" aria-label="계획서와 세션 바로가기"><a href="#plan-d53b6ee76c54">examples/Slice_Plan_Settings.md</a></nav><section class="dashboard-overview" id="hglos-overview" aria-label="프로젝트 상태 요약"><div class="section-heading"><h2>한눈에 보는 작업 상태</h2><span class="warning-count" data-warning-count="0">입력·관계 경고 0</span></div><div class="status-metrics"><a class="status-metric active" href="#queue-active" data-task-state="active" data-count="1"><span class="metric-label">▶ 진행 중</span><strong>1</strong><span class="metric-unit">문서 작업</span></a><a class="status-metric blocked" href="#queue-blocked" data-task-state="blocked" data-count="1"><span class="metric-label">! 차단</span><strong>1</strong><span class="metric-unit">문서 작업</span></a><a class="status-metric done" href="#queue-done" data-task-state="done" data-count="1"><span class="metric-label">✓ 완료</span><strong>1</strong><span class="metric-unit">문서 작업</span></a><a class="status-metric pending" href="#queue-pending" data-task-state="pending" data-count="0"><span class="metric-label">○ 대기</span><strong>0</strong><span class="metric-unit">문서 작업</span></a><a class="status-metric unknown" href="#queue-unknown" data-task-state="unknown" data-count="1"><span class="metric-label">? 미검증</span><strong>1</strong><span class="metric-unit">문서 작업</span></a></div><div class="status-segments" role="img" aria-label="대기 0 · 진행 중 1 · 완료 1 · 차단 1 · 미검증 1"><span class="segment active" style="width:25.000000%" title="진행 중 1"></span><span class="segment blocked" style="width:25.000000%" title="차단 1"></span><span class="segment done" style="width:25.000000%" title="완료 1"></span><span class="segment unknown" style="width:25.000000%" title="미검증 1"></span></div><p class="muted">작업 정의 4행 · 각 계획서의 작업 정의 행 기준 · 완료율/승인 판정 아님</p></section><section class="queues-panel" aria-label="상태별 작업 찾아보기"><h2>상태별 작업 찾아보기</h2><details class="status-queue" id="queue-active"><summary>▶ 진행 중 · 1개</summary><ul><li><a href="#task-d53b6ee76c54-45">B 수정</a><span>examples/Slice_Plan_Settings.md · L67</span></li></ul></details><details class="status-queue" id="queue-blocked"><summary>! 차단 · 1개</summary><ul><li><a href="#task-d53b6ee76c54-46">C 회귀</a><span>examples/Slice_Plan_Settings.md · L68</span></li></ul></details><details class="status-queue" id="queue-done"><summary>✓ 완료 · 1개</summary><ul><li><a href="#task-d53b6ee76c54-44">A 조사</a><span>examples/Slice_Plan_Settings.md · L66</span></li></ul></details><details class="status-queue" id="queue-pending"><summary>○ 대기 · 0개</summary><ul><li>해당 상태의 작업 정의 없음</li></ul></details><details class="status-queue" id="queue-unknown"><summary>? 미검증 · 1개</summary><ul><li><a href="#task-d53b6ee76c54-47">V 검증</a><span>examples/Slice_Plan_Settings.md · L69</span></li></ul></details></section><main><article class="plan-card" id="plan-d53b6ee76c54"><div class="section-heading"><h2>Slice Plan - 설정 저장 오류 (학습용 가상 시나리오)</h2><a href="#provenance-d53b6ee76c54">원본 근거</a></div><div class="visual-note">문서 표기 시각화 · 승인/완료 유효성 미검증</div><figure class="workflow" tabindex="0" aria-label="단계 흐름, 좁은 화면에서 가로 스크롤"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 900 158" width="900" height="158" role="img" aria-label="계획·구현·검증 흐름"><title>계획·구현·검증 흐름</title><desc>Current State 단계 현황의 원문이며 승인 유효성 미검증</desc><rect x="0" y="0" width="900" height="158" fill="#ffffff"/><g><title>설계 · 문서 상태: 완료</title><rect data-node="true" x="12" y="35" width="250" height="86" rx="12" fill="#e3f4ed" stroke="#24624d" stroke-width="2"/><text x="26" y="61" font-size="14" fill="#193249" font-family="Segoe UI,Malgun Gothic,sans-serif">설계</text><text x="26" y="88" font-size="12" fill="#24624d" font-family="Segoe UI,Malgun Gothic,sans-serif">✓ 문서: 완료</text><text x="26" y="108" font-size="10" fill="#24624d" font-family="Segoe UI,Malgun Gothic,sans-serif">완료 · 원문 L59</text></g><path d="M268,77 h34 l-7,-5 m7,5 l-7,5" fill="none" stroke="#718596" stroke-width="2"/><g><title>구현 · 문서 상태: 진행 중</title><rect data-node="true" x="312" y="35" width="250" height="86" rx="12" fill="#e7f1ff" stroke="#1c5794" stroke-width="2"/><text x="326" y="61" font-size="14" fill="#193249" font-family="Segoe UI,Malgun Gothic,sans-serif">구현</text><text x="326" y="88" font-size="12" fill="#1c5794" font-family="Segoe UI,Malgun Gothic,sans-serif">▶ 문서: 진행 중</text><text x="326" y="108" font-size="10" fill="#1c5794" font-family="Segoe UI,Malgun Gothic,sans-serif">진행 중 · 원문 L60</text></g><path d="M568,77 h34 l-7,-5 m7,5 l-7,5" fill="none" stroke="#718596" stroke-width="2"/><g><title>검증 · 문서 상태: 대기</title><rect data-node="true" x="612" y="35" width="250" height="86" rx="12" fill="#eef2f6" stroke="#526274" stroke-width="2"/><text x="626" y="61" font-size="14" fill="#193249" font-family="Segoe UI,Malgun Gothic,sans-serif">검증</text><text x="626" y="88" font-size="12" fill="#526274" font-family="Segoe UI,Malgun Gothic,sans-serif">○ 문서: 대기</text><text x="626" y="108" font-size="10" fill="#526274" font-family="Segoe UI,Malgun Gothic,sans-serif">대기 · 원문 L61</text></g><text x="12" y="146" font-size="12" fill="#193249" font-family="Segoe UI,Malgun Gothic,sans-serif">사람 승인과 독립 검증을 생략하지 않습니다. 문서에 없는 상태는 ?로 남깁니다.</text></svg><figcaption>계획 → 구현 → 검증. 상태는 Current State의 단계 현황 원문입니다.</figcaption></figure><div class="resume-grid"><section class="resume"><h3>현재 위치</h3><p>가상 시나리오상 B 수정 진행 중</p><small>원문 L51</small></section><section class="resume"><h3>다음 한 단계</h3><p>가상 예시에서는 B 수정 완료 후 C 회귀로 진행</p><small>원문 L54</small></section></div><section class="flow-panel" aria-label="작업 흐름"><div class="section-heading"><h3>작업 흐름</h3><span>선행 → 후속</span></div><figure class="dependency" tabindex="0" aria-label="작업 의존도, 필요한 경우 가로 스크롤"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 600 536" width="600" height="536" role="img" aria-label="작업 의존도"><title>작업 의존도</title><desc>after에 명시된 선행 관계이며 병렬 실행 판정이 아님</desc><rect x="0" y="0" width="600" height="536" fill="#ffffff"/><path data-from="A 조사" data-to="B 수정" data-route="adjacent" d="M145,116 V126 H145 V160 l-5,-7 m5,7 l5,-7" fill="none" stroke="#718596" stroke-width="2"><title>A 조사 → B 수정 · 선행</title></path><path data-from="B 수정" data-to="C 회귀" data-route="adjacent" d="M145,246 V256 H145 V290 l-5,-7 m5,7 l5,-7" fill="none" stroke="#718596" stroke-width="2"><title>B 수정 → C 회귀 · 선행</title></path><path data-from="C 회귀" data-to="V 검증" data-route="adjacent" d="M145,376 V386 H145 V420 l-5,-7 m5,7 l5,-7" fill="none" stroke="#718596" stroke-width="2"><title>C 회귀 → V 검증 · 선행</title></path><a href="#task-d53b6ee76c54-44" tabindex="0" aria-label="A 조사 작업 상세로 이동"><g><title>A 조사 · 문서 상태: 완료</title><rect data-node="true" x="20" y="30" width="250" height="86" rx="12" fill="#e3f4ed" stroke="#24624d" stroke-width="2"/><text x="34" y="56" font-size="14" fill="#193249" font-family="Segoe UI,Malgun Gothic,sans-serif">A 조사</text><text x="34" y="83" font-size="12" fill="#24624d" font-family="Segoe UI,Malgun Gothic,sans-serif">✓ 문서: 완료</text><text x="34" y="103" font-size="10" fill="#24624d" font-family="Segoe UI,Malgun Gothic,sans-serif">완료 · 원문 L66</text></g></a><a href="#task-d53b6ee76c54-45" tabindex="0" aria-label="B 수정 작업 상세로 이동"><g><title>B 수정 · 문서 상태: 진행 중</title><rect data-node="true" x="20" y="160" width="250" height="86" rx="12" fill="#e7f1ff" stroke="#1c5794" stroke-width="2"/><text x="34" y="186" font-size="14" fill="#193249" font-family="Segoe UI,Malgun Gothic,sans-serif">B 수정</text><text x="34" y="213" font-size="12" fill="#1c5794" font-family="Segoe UI,Malgun Gothic,sans-serif">▶ 문서: 진행 중</text><text x="34" y="233" font-size="10" fill="#1c5794" font-family="Segoe UI,Malgun Gothic,sans-serif">진행 중 · 원문 L67</text></g></a><a href="#task-d53b6ee76c54-46" tabindex="0" aria-label="C 회귀 작업 상세로 이동"><g><title>C 회귀 · 문서 상태: 차단</title><rect data-node="true" x="20" y="290" width="250" height="86" rx="12" fill="#fff0e5" stroke="#8b461c" stroke-width="2"/><text x="34" y="316" font-size="14" fill="#193249" font-family="Segoe UI,Malgun Gothic,sans-serif">C 회귀</text><text x="34" y="343" font-size="12" fill="#8b461c" font-family="Segoe UI,Malgun Gothic,sans-serif">! 문서: 차단</text><text x="34" y="363" font-size="10" fill="#8b461c" font-family="Segoe UI,Malgun Gothic,sans-serif">차단 · 원문 L68</text></g></a><a href="#task-d53b6ee76c54-47" tabindex="0" aria-label="V 검증 작업 상세로 이동"><g><title>V 검증 · 문서 상태: 미검증</title><rect data-node="true" x="20" y="420" width="250" height="86" rx="12" fill="#f1edf7" stroke="#665182" stroke-width="2" stroke-dasharray="5 4"/><text x="34" y="446" font-size="14" fill="#193249" font-family="Segoe UI,Malgun Gothic,sans-serif">V 검증</text><text x="34" y="473" font-size="12" fill="#665182" font-family="Segoe UI,Malgun Gothic,sans-serif">? 문서: 미검증</text><text x="34" y="493" font-size="10" fill="#665182" font-family="Segoe UI,Malgun Gothic,sans-serif">미검증 · 원문 L69</text></g></a></svg><figcaption>화살표는 after 선행 관계입니다. 일정·병렬 허가·현재 차단 원인을 판정하지 않습니다. 노드에서 작업 상세로 이동한 뒤 Enter/Space로 펼칩니다.</figcaption></figure></section><h3 id="board-d53b6ee76c54">작업 상태 보드 <span class="muted">제목을 눌러 근거 펼치기</span></h3><div class="task-board"><section class="lane pending" id="lane-d53b6ee76c54-pending" data-state="pending" data-count="0"><h4>○ 대기 <span>0</span></h4></section><section class="lane active" id="lane-d53b6ee76c54-active" data-state="active" data-count="1"><h4>▶ 진행 중 <span>1</span></h4><details class="task" id="task-d53b6ee76c54-45"><summary><strong>B 수정</strong><span class="task-status">▶ 진행 중</span></summary><small>상태 원문 L67 · 진행 중</small><p>선행: A 조사</p><p>근거 원문: 가상 표시 · 파일 수정 없음</p><p>작업 정의 L45 · 쓰기 범위: src/SettingsStore.cs</p><p>oracle: 빈 목록 보존</p><p>검증 (계획): 재현 테스트</p></details></section><section class="lane done" id="lane-d53b6ee76c54-done" data-state="done" data-count="1"><h4>✓ 완료 <span>1</span></h4><details class="task" id="task-d53b6ee76c54-44"><summary><strong>A 조사</strong><span class="task-status">✓ 완료</span></summary><small>상태 원문 L66 · 완료</small><p>선행: 없음</p><p>근거 원문: 가상 표시 · 조사 실행 없음</p><p>작업 정의 L44 · 쓰기 범위: doc/investigation.md</p><p>oracle: 재현 조건</p><p>검증 (계획): 저장·로드 경로 확인</p></details></section><section class="lane blocked" id="lane-d53b6ee76c54-blocked" data-state="blocked" data-count="1"><h4>! 차단 <span>1</span></h4><details class="task" id="task-d53b6ee76c54-46"><summary><strong>C 회귀</strong><span class="task-status">! 차단</span></summary><small>상태 원문 L68 · 차단</small><p>선행: B 수정</p><p>근거 원문: 가상 표시 · 기존 데이터 표본 대기</p><p>작업 정의 L46 · 쓰기 범위: tests/SettingsStoreTests.cs</p><p>oracle: 기존 입력 보존</p><p>검증 (계획): dotnet test</p></details></section><section class="lane unknown" id="lane-d53b6ee76c54-unknown" data-state="unknown" data-count="1"><h4>? 미검증 <span>1</span></h4><details class="task" id="task-d53b6ee76c54-47"><summary><strong>V 검증</strong><span class="task-status">? 미검증</span></summary><small>상태 원문 L69 · 미검증</small><p>선행: C 회귀</p><p>근거 원문: 실제 검증 없음</p><p>작업 정의 L47 · 쓰기 범위: 읽기 전용</p><p>oracle: C1~C3</p><p>검증 (계획): 조건별 근거 대조</p></details></section></div><details class="evidence-panel"><summary>판단·검증 근거 펼치기</summary><h4>결정 필요</h4><p>실제 업무에서는 범위·계획 승인 및 기존 데이터 표본 필요</p><small>원문 L53</small><h4>확인된 사실</h4><p>화면 설명용 상태만 입력함. 실제 실행 없음.</p><small>원문 L52</small><p class="phase-evidence">설계 L59 · 근거 원문: 가상 표시 · 실제 승인 아님</p><p class="phase-evidence">구현 L60 · 근거 원문: 가상 표시 · 실제 코드 없음</p><p class="phase-evidence">검증 L61 · 근거 원문: 가상 표시 · 실제 시험 없음</p><h3>종결 조건과 검증 근거</h3><div class="table-scroll"><table><thead><tr><th>조건</th><th>문서 판정</th><th>판정 수단 (계획)</th><th>근거 원문</th><th>출처</th></tr></thead><tbody><tr><td>빈 목록 round-trip 유지</td><td>미검증</td><td>실제 저장·로드 경로의 회귀 테스트</td><td>실제 실행 없음</td><td>L16</td></tr><tr><td>기존 JSON·public API 보존</td><td>미검증</td><td>기존 데이터 로드와 API 호출 회귀 검사</td><td>실제 실행 없음</td><td>L17</td></tr><tr><td>잘못된 입력 처리 보존</td><td>미검증</td><td>잘못된 JSON·경로 오류 검사</td><td>실제 실행 없음</td><td>L18</td></tr></tbody></table></div></details><details id="source-d53b6ee76c54"><summary>편집 가능한 Mermaid 도식 원본</summary><pre>flowchart LR
+  P0[&quot;설계 · 완료 · 문서#58; 완료&quot;]
+  class P0 done
+  P1[&quot;구현 · 진행 중 · 문서#58; 진행 중&quot;]
+  class P1 active
+  P2[&quot;검증 · 대기 · 문서#58; 대기&quot;]
+  class P2 pending
+  P0 --&gt;|계획서| P1
+  P1 --&gt;|결과와 독립 검증| P2
+  classDef pending fill:#eef2f6,stroke:#526274,color:#526274
+  classDef active fill:#e7f1ff,stroke:#1c5794,color:#1c5794
+  classDef done fill:#e3f4ed,stroke:#24624d,color:#24624d
+  classDef blocked fill:#fff0e5,stroke:#8b461c,color:#8b461c
+  classDef unknown fill:#f1edf7,stroke:#665182,color:#665182
+</pre><pre>flowchart LR
+  T0[&quot;A 조사 · 완료 · 문서#58; 완료&quot;]
+  class T0 done
+  T1[&quot;B 수정 · 진행 중 · 문서#58; 진행 중&quot;]
+  class T1 active
+  T0 --&gt;|선행| T1
+  T2[&quot;C 회귀 · 차단 · 문서#58; 차단&quot;]
+  class T2 blocked
+  T1 --&gt;|선행| T2
+  T3[&quot;V 검증 · 미검증 · 문서#58; 미검증&quot;]
+  class T3 unknown
+  T2 --&gt;|선행| T3
+  classDef pending fill:#eef2f6,stroke:#526274,color:#526274
+  classDef active fill:#e7f1ff,stroke:#1c5794,color:#1c5794
+  classDef done fill:#e3f4ed,stroke:#24624d,color:#24624d
+  classDef blocked fill:#fff0e5,stroke:#8b461c,color:#8b461c
+  classDef unknown fill:#f1edf7,stroke:#665182,color:#665182
+</pre></details><details class="source-meta" id="provenance-d53b6ee76c54"><summary>원본 문서와 SHA-256 확인</summary><a href="../Slice_Plan_Settings.md">examples/Slice_Plan_Settings.md</a><small>SHA-256 52e106c04df8d041e55667919640a09efca381a76da03b48cb8061e0f38e6ccc</small></details><details><summary>승인 관련 원문 · 유효성 미검증</summary><pre>L4: &gt; 실제 프로젝트 조사·승인·구현·시험은 하지 않았습니다. 구현에는 별도로 승인받은 계획서를 사용하세요.
+L8: **승인**: 범위 미승인 · 계획 미승인 · 종결 미승인
+L50: - 승인 시점 커밋: 없음 · 가상 예시이며 미승인
+L53: - 결정 필요: 실제 업무에서는 범위·계획 승인 및 기존 데이터 표본 필요</pre></details><details><summary>원문 · Current State <span class="badge">L49</span></summary><pre>## Current State
+- 승인 시점 커밋: 없음 · 가상 예시이며 미승인
+- 현재 위치: 가상 시나리오상 B 수정 진행 중
+- 확인된 사실: 화면 설명용 상태만 입력함. 실제 실행 없음.
+- 결정 필요: 실제 업무에서는 범위·계획 승인 및 기존 데이터 표본 필요
+- 다음 한 단계: 가상 예시에서는 B 수정 완료 후 C 회귀로 진행
+
+### 단계 현황
+| 단계 | 상태 | 근거 |
+|---|---|---|
+| 계획 | 완료 | 가상 표시 · 실제 승인 아님 |
+| 구현 | 진행 중 | 가상 표시 · 실제 코드 없음 |
+| 검증 | 대기 | 가상 표시 · 실제 시험 없음 |
+
+### 작업 현황
+| 작업 | 상태 | 근거 |
+|---|---|---|
+| A 조사 | 완료 | 가상 표시 · 조사 실행 없음 |
+| B 수정 | 진행 중 | 가상 표시 · 파일 수정 없음 |
+| C 회귀 | 차단 | 가상 표시 · 기존 데이터 표본 대기 |
+| V 검증 | 미검증 | 실제 검증 없음 |</pre></details><details><summary>원문 · 종결 조건 <span class="badge">L13</span></summary><pre>## 2. 종결 조건
+| # | 조건 | 판정 수단 (실행 가능한 것) | 미달 예시 | 판정 | 근거 |
+|---|---|---|---|---|---|
+| C1 | 빈 목록 round-trip 유지 | 실제 저장·로드 경로의 회귀 테스트 | null로 변경 | 미검증 | 실제 실행 없음 |
+| C2 | 기존 JSON·public API 보존 | 기존 데이터 로드와 API 호출 회귀 검사 | 기존 입력 실패 | 미검증 | 실제 실행 없음 |
+| C3 | 잘못된 입력 처리 보존 | 잘못된 JSON·경로 오류 검사 | 예외 계약 변경 | 미검증 | 실제 실행 없음 |
+</pre></details><details><summary>원문 · 미결 <span class="badge">L36</span></summary><pre>## 7. 미결
+| # | 미결 | 닫히는 조건 | 필요 시점 | 누가 |
+|---|---|---|---|---|
+| Q1 | 기존 데이터 표본 | 사람이 공개 가능한 표본 제공 | 호환성 검사 전 | 사용자 |
+</pre></details><details><summary>원문 · 작업 분할 <span class="badge">L41</span></summary><pre>## 8. 작업 분할
+| 작업 | 실행자 | 쓰기 범위 | 공유 자원 | after | 예상(분) | tier | oracle | 검증 |
+|---|---|---|---|---|---|---|---|---|
+| A 조사 | MAIN | doc/investigation.md | 없음 | | 15 | small | 재현 조건 | 저장·로드 경로 확인 |
+| B 수정 | MAIN | src/SettingsStore.cs | 없음 | A 조사 | 25 | small | 빈 목록 보존 | 재현 테스트 |
+| C 회귀 | MAIN | tests/SettingsStoreTests.cs | .NET 빌드 출력 | B 수정 | 20 | small | 기존 입력 보존 | dotnet test |
+| V 검증 | 독립 검증자 | 읽기 전용 | 없음 | C 회귀 | 20 | small | C1~C3 | 조건별 근거 대조 |
+</pre></details></article></main><footer>계획서 1 · 우려 대장 0 · 누락 절 0 (미검증). 명시적으로 제공된 세션 스냅샷 외에 실시간 세션·장비 상태와 자동 진행률은 수집하지 않습니다. 상태 집계는 원문 표기의 집계입니다. 입력 SHA-256은 생성 시 읽은 바이트 기준입니다.</footer></body></html>
+<!-- /HGLOS-DASHBOARD -->

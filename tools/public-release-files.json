@@ -98,5 +98,12 @@
   ".claude-plugin/marketplace.json": "integrations/public/marketplace.json",
   "integrations/public/marketplace.json": "integrations/public/marketplace.json",
   ".gitignore": "integrations/public/.gitignore",
-  "integrations/public/.gitignore": "integrations/public/.gitignore"
+  "integrations/public/.gitignore": "integrations/public/.gitignore",
+  "tools/build_demo_dashboard.py": "tools/build_demo_dashboard.py",
+  "examples/dashboard/index.html": "examples/dashboard/index.html",
+  "examples/dashboard/preview.png": "examples/dashboard/preview.png",
+  "examples/dashboard/diagrams/01-Slice_Plan_Settings-dependencies.mmd": "examples/dashboard/diagrams/01-Slice_Plan_Settings-dependencies.mmd",
+  "examples/dashboard/diagrams/01-Slice_Plan_Settings-dependencies.svg": "examples/dashboard/diagrams/01-Slice_Plan_Settings-dependencies.svg",
+  "examples/dashboard/diagrams/01-Slice_Plan_Settings-workflow.mmd": "examples/dashboard/diagrams/01-Slice_Plan_Settings-workflow.mmd",
+  "examples/dashboard/diagrams/01-Slice_Plan_Settings-workflow.svg": "examples/dashboard/diagrams/01-Slice_Plan_Settings-workflow.svg"
 }

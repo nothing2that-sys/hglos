@@ -39,7 +39,9 @@ class PublicDistribution(unittest.TestCase):
             self.assertIn('plugin/hglos/LICENSE', archive.namelist())
             for name in archive.namelist():
                 self.assertNotIn(name.split('/')[0], ('.git', 'validation', 'codex', 'doc', 'hglos-design'))
-                self.assertFalse(name.endswith(('.log', '.sqlite3', '.png', '.woff', '.js')))
+                # Only the explicitly reviewed, synthetic dashboard preview is a shipped image.
+                if name != 'examples/dashboard/preview.png':
+                    self.assertFalse(name.endswith(('.log', '.sqlite3', '.png', '.woff', '.js')))
 
     def test_unreviewed_validation_path_is_rejected(self):
         manifest = self.root / 'manifest.json'
@@ -59,6 +61,7 @@ class PublicDistribution(unittest.TestCase):
         commands = [
             [sys.executable, '-B', str(extracted / 'tools/install_skills.py'), '--target', 'codex', '--project', str(project)],
             [sys.executable, '-B', str(extracted / 'tools/package_public_source.py'), '--outdir', str(self.root / 'rebuilt')],
+            [sys.executable, '-B', str(extracted / 'tools/build_demo_dashboard.py')],
         ]
         for command in commands:
             result = subprocess.run(command, cwd=extracted, env=env, capture_output=True, text=True, encoding='utf-8', timeout=30)
@@ -66,6 +69,7 @@ class PublicDistribution(unittest.TestCase):
         for skill in package_skill.SKILLS:
             self.assertEqual((project / '.agents/skills' / skill / 'LICENSE').read_bytes(), (REPO / 'LICENSE').read_bytes())
         self.assertTrue((self.root / 'rebuilt/hglos-public-source.zip').is_file())
+        self.assertTrue((extracted / 'examples/dashboard/index.html').is_file())
 
     def test_public_allowlist_includes_shared_and_fix_tests_and_plan_hash(self):
         # doc/29 condition 11 (L5).

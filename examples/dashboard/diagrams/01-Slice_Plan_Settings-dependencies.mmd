@@ -1,0 +1,20 @@
+%% HGLOS-DIAGRAM v1
+%% Source: examples/Slice_Plan_Settings.md SHA-256 52e106c04df8d041e55667919640a09efca381a76da03b48cb8061e0f38e6ccc
+flowchart LR
+  T0["A 조사 · 완료 · 문서#58; 완료"]
+  class T0 done
+  T1["B 수정 · 진행 중 · 문서#58; 진행 중"]
+  class T1 active
+  T0 -->|선행| T1
+  T2["C 회귀 · 차단 · 문서#58; 차단"]
+  class T2 blocked
+  T1 -->|선행| T2
+  T3["V 검증 · 미검증 · 문서#58; 미검증"]
+  class T3 unknown
+  T2 -->|선행| T3
+  classDef pending fill:#eef2f6,stroke:#526274,color:#526274
+  classDef active fill:#e7f1ff,stroke:#1c5794,color:#1c5794
+  classDef done fill:#e3f4ed,stroke:#24624d,color:#24624d
+  classDef blocked fill:#fff0e5,stroke:#8b461c,color:#8b461c
+  classDef unknown fill:#f1edf7,stroke:#665182,color:#665182
+%% /HGLOS-DIAGRAM

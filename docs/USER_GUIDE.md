@@ -5,6 +5,7 @@
 HGLOS는 사용하는 AI에게 절차와 도구를 제공하는 스킬입니다.
 Git, Python 3.10 이상과 Codex 또는 Claude Code를 준비하고 호스트에 로그인합니다.
 기본 설치에는 pip·API 키가 필요 없습니다. 호스트 구독·모델 이용 조건은 별도입니다.
+대상은 실제 작업할 Git 프로젝트의 루트입니다. 배포용 `hglos` 폴더와 구분하세요.
 [README](../README.md)의 설치 명령을 실행하세요. 대상 프로젝트 폴더는 먼저 만들어 둡니다.
 macOS/Linux는 `D:/my-project`를 `/path/to/my-project`로 바꾸면 됩니다.
 
@@ -16,6 +17,9 @@ macOS/Linux는 `D:/my-project`를 `/path/to/my-project`로 바꾸면 됩니다.
 
 위 인자는 `python tools/install_skills.py` 뒤에 붙입니다. `--target all`은 Antigravity까지 포함합니다.
 새 대화에서 스킬 목록과 이름을 명시한 호출을 확인하세요. 파일 설치와 실제 모델 수행은 별개입니다.
+CLI에서는 설치 대상 폴더에서 `codex` 또는 `claude`를 시작합니다. 일반 웹 채팅에는 로컬 설치가 적용되지 않습니다.
+처음에는 `hglos-design`에 목표·범위를 질문해 달라고 요청하고, 승인 전 구현하지 않는지 확인하세요.
+사용한 `SKILL.md` 경로가 설치 대상 안인지 물어보면 다른 설치본을 읽는 경우를 구분할 수 있습니다.
 plugin과 개별 스킬은 중복 설치하지 않는 편이 좋습니다.
 설치기는 기존 `AGENTS.md`·`CLAUDE.md`·hooks를 편집하지 않습니다.
 항상 적용할 규칙은 [RULES.md](../plugin/hglos/RULES.md)의 붙여넣기 블록을 필요한 만큼 기존 지침에 병합하세요.
@@ -37,6 +41,10 @@ plugin과 개별 스킬은 중복 설치하지 않는 편이 좋습니다.
 
 ## 대시보드만 써 보기
 
+완성된 가상 예제는 `examples/dashboard/index.html`을 더블클릭하면 됩니다.
+[화면 미리보기](../examples/dashboard/preview.png) · [가상 계획서](../examples/Slice_Plan_Settings.md).
+가상 상태를 보여주는 화면이며 실제 승인·코드·시험 결과가 아닙니다. GitHub에서는 HTML 소스만 보입니다.
+
 저장소 루트에서 실행합니다. 예제는 승인·실행 결과가 없는 학습용 계획서입니다.
 
 ```powershell
@@ -44,6 +52,8 @@ python plugin/hglos/skills/hglos-dashboard/scripts/dashboard.py --repo . --plan 
 ```
 
 생성된 `validation/example-dashboard.html`을 브라우저로 엽니다. 서버·JavaScript·외부 폰트가 필요 없습니다.
+배포된 예제 HTML과 SVG·Mermaid 원본을 다시 만들려면 `python tools/build_demo_dashboard.py`를 실행합니다.
+PNG 미리보기는 브라우저 렌더링 이미지이며 이 명령에서는 갱신하지 않습니다.
 재생성은 기존 생성물을 확인한 뒤 `--overwrite`를 붙입니다. 문서 스냅샷이며 실시간 감시·자동 완료 판정은 하지 않습니다.
 
 ## 같은 폴더에서 Codex와 Claude 함께 쓰기 (선택)
@@ -84,6 +94,7 @@ plugin 제거는 `claude plugin uninstall hglos@hglos`입니다.
 |---|---|
 | Windows에서 `python` 실행 실패 | Store 별칭 대신 `py -3` 또는 실제 Python 경로 사용 |
 | 스킬이 안 보임 | 프로젝트·설치 위치 확인 → 새 대화 → 이름을 명시해 호출 |
+| 다른 설치본을 읽음 | 같은 이름의 사용자 설치본·plugin 중복 확인. Codex는 동일 이름이 함께 보일 수 있고 Claude는 사용자 스킬이 프로젝트 스킬보다 우선함. 실제 `SKILL.md` 경로 확인 후 사용할 설치본을 선택·업데이트 |
 | `Existing skill differs` | 기존 파일 확인 후 `--upgrade --dry-run`으로 교체 범위 확인 |
 | 설치 lock 잔류 | 실제 설치 프로세스가 없음을 확인한 뒤 강제 종료 잔여 lock만 정리 |
 | 구현이 승인을 요구함 | 실제 계획서 승인란과 승인 이후 변경 여부 확인 |
